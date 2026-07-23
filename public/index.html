@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth dark">
+<html lang="vi" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,13 +43,14 @@
   <!-- Custom Museum CSS -->
   <link rel="stylesheet" href="/css/museum.css">
 </head>
-<body class="font-sans antialiased text-slate-100 vietnam-star-bg">
+<body class="font-sans antialiased text-slate-100 bg-slate-950">
 
-  <!-- TOP MUSEUM NAVIGATION BAR -->
-  <header class="w-full bg-slate-950/90 border-b border-amber-500/30 sticky top-0 z-40 backdrop-blur-md">
+  <!-- TOP MUSEUM NAVIGATION HEADER BAR -->
+  <header class="w-full bg-slate-950/95 border-b border-amber-500/30 sticky top-0 z-40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
       
-      <a href="#hero" class="flex items-center space-x-3 group">
+      <!-- Logo Branding -->
+      <a href="#" data-tab="hero" class="flex items-center space-x-3 group">
         <div class="w-10 h-10 bg-flagRed rounded-full flex items-center justify-center text-flagGold text-xl font-bold border-2 border-flagGold shadow-md group-hover:scale-105 transition">
           <i class="fa-solid fa-star"></i>
         </div>
@@ -61,36 +62,53 @@
         </div>
       </a>
 
-      <!-- Nav Links -->
-      <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-slate-300">
-        <a href="#timeline" class="hover:text-flagGold transition flex items-center gap-1.5">
-          <i class="fa-solid fa-timeline text-amber-400"></i> Tiến Trình
-        </a>
-        <a href="#data-visuals" class="hover:text-flagGold transition flex items-center gap-1.5">
-          <i class="fa-solid fa-chart-line text-emerald-400"></i> Dữ Liệu Số
-        </a>
-        <a href="#editorial" class="hover:text-flagGold transition flex items-center gap-1.5">
-          <i class="fa-solid fa-newspaper text-sky-400"></i> Quyết Sách
-        </a>
-        <a href="#simulator" class="hover:text-flagGold transition flex items-center gap-1.5 text-flagGold">
-          <i class="fa-solid fa-gamepad"></i> Mô Phỏng Simulator
-        </a>
+      <!-- Tab Navigation Menu -->
+      <nav class="hidden md:flex items-center space-x-2 text-xs font-bold uppercase tracking-wider">
+        <button data-tab="hero" class="nav-tab-btn px-3 py-2 rounded-xl border border-slate-800 text-slate-300 hover:text-flagGold transition flex items-center gap-1.5 active">
+          <i class="fa-solid fa-house text-amber-400"></i>
+          <span>Tổng Quan</span>
+        </button>
+        <button data-tab="timeline" class="nav-tab-btn px-3 py-2 rounded-xl border border-slate-800 text-slate-300 hover:text-flagGold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-timeline text-amber-400"></i>
+          <span>Tiến Trình (1986 - 2021)</span>
+        </button>
+        <button data-tab="data-visuals" class="nav-tab-btn px-3 py-2 rounded-xl border border-slate-800 text-slate-300 hover:text-flagGold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-line text-emerald-400"></i>
+          <span>Dữ Liệu Số</span>
+        </button>
+        <button data-tab="editorial" class="nav-tab-btn px-3 py-2 rounded-xl border border-slate-800 text-slate-300 hover:text-flagGold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-newspaper text-sky-400"></i>
+          <span>Chuyên Đề Văn Kiện</span>
+        </button>
+        <button data-tab="simulator" class="nav-tab-btn px-3 py-2 rounded-xl border border-amber-500/40 text-flagGold hover:bg-red-950/40 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-gamepad text-flagGold"></i>
+          <span>Mô Phỏng Simulator</span>
+        </button>
       </nav>
 
       <!-- Player Join Link -->
       <div class="flex items-center space-x-3">
-        <a href="/player" target="_blank" class="bg-gradient-to-r from-flagRed to-amber-500 hover:brightness-110 text-white font-extrabold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 shadow-lg transition">
+        <a href="/player" target="_blank" class="bg-gradient-to-r from-flagRed to-amber-500 hover:brightness-110 text-white font-extrabold px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 shadow-lg transition">
           <i class="fa-solid fa-mobile-screen-button"></i>
-          <span>Giao Diện Mobile Player</span>
+          <span>Giao Diện Mobile</span>
         </a>
       </div>
 
     </div>
+
+    <!-- Mobile Subnav Bar -->
+    <div class="md:hidden flex overflow-x-auto p-2 border-t border-slate-800 space-x-2 text-[11px] font-bold">
+      <button data-tab="hero" class="nav-tab-btn px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">Tổng Quan</button>
+      <button data-tab="timeline" class="nav-tab-btn px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">Tiến Trình</button>
+      <button data-tab="data-visuals" class="nav-tab-btn px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">Dữ Liệu Số</button>
+      <button data-tab="editorial" class="nav-tab-btn px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">Văn Kiện</button>
+      <button data-tab="simulator" class="nav-tab-btn px-3 py-1.5 rounded-lg border border-amber-500/40 text-flagGold shrink-0">Simulator</button>
+    </div>
   </header>
 
-  <!-- SECTION 1: HERO BANNER & QUOTE -->
-  <section id="hero" class="relative py-16 md:py-24 px-4 overflow-hidden">
-    <div class="max-w-5xl mx-auto text-center relative z-10">
+  <!-- TAB 1: HERO BANNER & OVERVIEW -->
+  <section id="section-hero" class="museum-tab-section py-16 md:py-24 px-4">
+    <div class="max-w-5xl mx-auto text-center">
       
       <span class="px-4 py-1.5 rounded-full bg-flagRed/20 border border-flagRed text-red-400 font-mono font-extrabold text-xs uppercase tracking-widest inline-block mb-4">
         TRIỂN LÃM TƯƠNG TÁC SỐ KỶ NIỆM 35 NĂM ĐỔI MỚI
@@ -106,7 +124,7 @@
       </p>
 
       <!-- FEATURED QUOTE BOX -->
-      <div class="glass-museum rounded-3xl p-6 md:p-8 border-2 border-flagGold max-w-4xl mx-auto gold-glow relative text-left">
+      <div class="glass-museum rounded-3xl p-6 md:p-8 border-2 border-flagGold max-w-4xl mx-auto gold-glow relative text-left mb-10">
         <div class="absolute -top-5 left-8 w-10 h-10 bg-flagRed rounded-full flex items-center justify-center text-flagGold text-xl font-black border-2 border-flagGold">
           <i class="fa-solid fa-quote-left"></i>
         </div>
@@ -126,11 +144,23 @@
         </div>
       </div>
 
+      <!-- TAB NAVIGATION QUICK LINKS -->
+      <div class="flex flex-wrap justify-center gap-4">
+        <button data-tab="timeline" class="bg-gradient-to-r from-flagRed via-red-600 to-amber-500 hover:brightness-110 text-white font-extrabold px-6 py-3 rounded-2xl shadow-xl transition flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-timeline"></i>
+          <span>Khám Phá Tiến Trình Lịch Sử</span>
+        </button>
+        <button data-tab="simulator" class="bg-slate-900 border border-flagGold hover:bg-slate-800 text-flagGold font-extrabold px-6 py-3 rounded-2xl shadow-xl transition flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-gamepad"></i>
+          <span>Vào Phòng Mô Phỏng Simulator</span>
+        </button>
+      </div>
+
     </div>
   </section>
 
-  <!-- SECTION 2: REAL-TIME INTERACTIVE HISTORICAL TIMELINE (1986 - 2021) -->
-  <section id="timeline" class="py-16 px-4 bg-slate-950/60 border-y border-slate-800">
+  <!-- TAB 2: REAL-TIME INTERACTIVE TIMELINE -->
+  <section id="section-timeline" class="museum-tab-section py-16 px-4 hidden">
     <div class="max-w-7xl mx-auto">
       
       <div class="text-center mb-12">
@@ -142,7 +172,7 @@
       </div>
 
       <!-- TIMELINE NODES GRID -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4 mb-10">
         
         <!-- 1986 Node -->
         <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="1986">
@@ -230,11 +260,18 @@
 
       </div>
 
+      <div class="text-center">
+        <button data-tab="data-visuals" class="bg-slate-900 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold px-6 py-2.5 rounded-xl text-xs inline-flex items-center gap-2">
+          <span>Xem Biểu Đồ & Dữ Liệu Số Kiểm Chứng</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
     </div>
   </section>
 
-  <!-- SECTION 3: DATA JOURNALISM & INFOGRAPHICS -->
-  <section id="data-visuals" class="py-16 px-4">
+  <!-- TAB 3: DATA JOURNALISM & INFOGRAPHICS -->
+  <section id="section-data-visuals" class="museum-tab-section py-16 px-4 hidden">
     <div class="max-w-7xl mx-auto">
       
       <div class="text-center mb-12">
@@ -271,7 +308,7 @@
               <p class="text-[11px] text-slate-400">Thành tựu xóa đói giảm nghèo được Liên Hợp Quốc vinh danh</p>
             </div>
             <span class="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-mono font-bold rounded-lg">
-              >60% ➔ <2,75%
+              >60% ➔ &lt;2,75%
             </span>
           </div>
           <div class="chart-container">
@@ -282,7 +319,7 @@
       </div>
 
       <!-- KPI METRIC CARDS -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         
         <!-- Rice Export Card -->
         <div class="glass-museum rounded-2xl p-5 border border-amber-500/30">
@@ -324,11 +361,18 @@
 
       </div>
 
+      <div class="text-center">
+        <button data-tab="editorial" class="bg-slate-900 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold px-6 py-2.5 rounded-xl text-xs inline-flex items-center gap-2">
+          <span>Đọc Chuyên Đề Văn Kiện Báo Chí</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
     </div>
   </section>
 
-  <!-- SECTION 4: EDITORIAL MAGAZINE LAYOUT -->
-  <section id="editorial" class="py-16 px-4 bg-slate-950/70 border-t border-slate-800">
+  <!-- TAB 4: EDITORIAL MAGAZINE LAYOUT -->
+  <section id="section-editorial" class="museum-tab-section py-16 px-4 hidden">
     <div class="max-w-7xl mx-auto">
       
       <div class="text-center mb-12">
@@ -339,7 +383,7 @@
       </div>
 
       <!-- MAGAZINE ARTICLES GRID -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         
         <!-- Article 1 -->
         <article class="glass-museum rounded-3xl p-6 border border-slate-800 hover:border-amber-500/40 transition">
@@ -403,11 +447,18 @@
 
       </div>
 
+      <div class="text-center">
+        <button data-tab="simulator" class="bg-gradient-to-r from-flagRed via-red-600 to-amber-500 hover:brightness-110 text-white font-extrabold px-8 py-3 rounded-2xl shadow-xl transition inline-flex items-center gap-2">
+          <i class="fa-solid fa-gamepad"></i>
+          <span>Thử Tài Quyết Sách Tại Minigame Simulator</span>
+        </button>
+      </div>
+
     </div>
   </section>
 
-  <!-- SECTION 5: INTEGRATED DOI MOI DECISION SIMULATOR (MINIGAME HUB) -->
-  <section id="simulator" class="py-16 px-4 bg-slate-950 border-t-2 border-flagGold relative">
+  <!-- TAB 5: INTEGRATED DOI MOI DECISION SIMULATOR (MINIGAME HUB) -->
+  <section id="section-simulator" class="museum-tab-section py-16 px-4 hidden">
     <div class="max-w-7xl mx-auto">
       
       <!-- SIMULATOR TITLE HEADER -->
@@ -659,7 +710,7 @@
         <p class="text-[11px] text-slate-500">Căn cứ văn kiện Giáo trình Lịch sử Đảng cộng sản Việt Nam</p>
       </div>
       <div class="flex items-center space-x-4">
-        <a href="#hero" class="hover:text-flagGold transition">Đầu Trang</a>
+        <a href="#" data-tab="hero" class="hover:text-flagGold transition">Tổng Quan</a>
         <a href="/player" target="_blank" class="hover:text-flagGold transition">Mobile Player</a>
       </div>
     </div>

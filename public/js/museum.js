@@ -1,6 +1,6 @@
 /* ==========================================================================
    DIGITAL MUSEUM & SIMULATOR HOST ENGINE
-   Handles Timeline Modals, Data Journalism Chart.js Infographics, and Socket.io Simulator
+   Handles Tab Navigation, Timeline Modals, Data Journalism Chart.js, and Socket.io Simulator
    ========================================================================== */
 
 // Detailed Historical Timeline Data matching Chapter 3 of Textbook
@@ -119,9 +119,76 @@ const MUSEUM_TIMELINE_DATA = {
   }
 };
 
+let chartInflationInstance = null;
+let chartPovertyInstance = null;
+
 document.addEventListener('DOMContentLoaded', () => {
+
   // --------------------------------------------------------------------------
-  // 1. TIMELINE INTERACTIVITY & MODAL HANDLING
+  // 1. TAB NAVIGATION SWITCHER LOGIC
+  // --------------------------------------------------------------------------
+  const tabSections = document.querySelectorAll('.museum-tab-section');
+  const navTabBtns = document.querySelectorAll('.nav-tab-btn');
+
+  function switchTab(tabId) {
+    if (!tabId) tabId = 'hero';
+    const cleanTabId = tabId.replace('#', '');
+
+    // Hide all sections
+    tabSections.forEach(sec => sec.classList.add('hidden'));
+
+    // Deactivate all nav buttons
+    navTabBtns.forEach(btn => btn.classList.remove('active'));
+
+    // Show target section
+    const targetSection = document.getElementById(`section-${cleanTabId}`);
+    if (targetSection) {
+      targetSection.classList.remove('hidden');
+    } else {
+      const fallback = document.getElementById('section-hero');
+      if (fallback) fallback.classList.remove('hidden');
+    }
+
+    // Activate corresponding nav button
+    const targetBtn = document.querySelector(`.nav-tab-btn[data-tab="${cleanTabId}"]`);
+    if (targetBtn) {
+      targetBtn.classList.add('active');
+    }
+
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Trigger chart rendering when Data Visuals tab is selected
+    if (cleanTabId === 'data-visuals') {
+      setTimeout(() => initMuseumCharts(), 100);
+    }
+  }
+
+  // Attach click listeners to nav buttons and deep action links
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      SoundEngine.playClick();
+      const tabTarget = btn.getAttribute('data-tab');
+      window.location.hash = tabTarget;
+      switchTab(tabTarget);
+    });
+  });
+
+  // Handle URL hash changes
+  window.addEventListener('hashchange', () => {
+    switchTab(window.location.hash);
+  });
+
+  // Initial tab load based on URL hash or default to hero
+  if (window.location.hash) {
+    switchTab(window.location.hash);
+  } else {
+    switchTab('hero');
+  }
+
+  // --------------------------------------------------------------------------
+  // 2. TIMELINE INTERACTIVITY & MODAL HANDLING
   // --------------------------------------------------------------------------
   const museumModal = document.getElementById('museumTimelineModal');
   const closeMuseumModalBtn = document.getElementById('closeMuseumModalBtn');
@@ -165,15 +232,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 2. DATA JOURNALISM CHART.JS INITIALIZATION
+  // 3. DATA JOURNALISM CHART.JS INITIALIZATION
   // --------------------------------------------------------------------------
-  initMuseumCharts();
-
   function initMuseumCharts() {
     // Chart 1: Inflation Drop Trend
     const ctxInflation = document.getElementById('chartInflationTrend');
     if (ctxInflation && window.Chart) {
-      new Chart(ctxInflation, {
+      if (chartInflationInstance) chartInflationInstance.destroy();
+      chartInflationInstance = new Chart(ctxInflation, {
         type: 'line',
         data: {
           labels: ['1986', '1989', '1995', '2007', '2011', '2016', '2020'],
@@ -181,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             label: 'Tỷ lệ Lạm phát (%)',
             data: [774.7, 34.7, 9.7, 12.7, 18.1, 2.7, 3.2],
             borderColor: '#C8102E',
-            backgroundColor: 'rgba(200, 16, 46, 0.15)',
+            backgroundColor: 'rgba(200, 16, 46, 0.2)',
             borderWidth: 3,
             fill: true,
             tension: 0.3,
@@ -206,14 +272,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Chart 2: Poverty Reduction Trend
     const ctxPoverty = document.getElementById('chartPovertyTrend');
     if (ctxPoverty && window.Chart) {
-      new Chart(ctxPoverty, {
+      if (chartPovertyInstance) chartPovertyInstance.destroy();
+      chartPovertyInstance = new Chart(ctxPoverty, {
         type: 'bar',
         data: {
           labels: ['1993', '1998', '2004', '2010', '2016', '2020'],
           datasets: [{
             label: 'Tỷ lệ hộ nghèo (%)',
             data: [58.1, 37.4, 19.5, 14.2, 5.8, 2.75],
-            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+            backgroundColor: 'rgba(16, 185, 129, 0.75)',
             borderColor: '#10B981',
             borderWidth: 1.5,
             borderRadius: 6
@@ -235,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 3. EMBEDDED DECISION SIMULATOR HOST CLIENT LOGIC
+  // 4. EMBEDDED DECISION SIMULATOR HOST CLIENT LOGIC
   // --------------------------------------------------------------------------
   const socket = io();
 
@@ -480,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (outcomeModal) outcomeModal.classList.remove('hidden');
     if (revealOutcomeBtn) revealOutcomeBtn.classList.add('hidden');
-    if (nextScenarioBtn) nextScenarioBtn.classList.remove('hidden');
+    if (nextScenarioBtn) nextScenarioBtn.remove('hidden');
     if (votingStatusText) votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn Tiếp Theo!`;
   });
 

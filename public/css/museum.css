@@ -9,8 +9,8 @@
   --color-flag-red: #c8102e;
   --color-flag-gold: #ffcd00;
   --color-gold-hover: #e6b800;
-  --color-glass-card: rgba(30, 41, 59, 0.75);
-  --color-glass-border: rgba(255, 205, 0, 0.2);
+  --color-glass-card: rgba(15, 23, 42, 0.85);
+  --color-glass-border: rgba(255, 205, 0, 0.25);
 }
 
 /* Custom Scrollbar */
@@ -29,16 +29,19 @@
   background: #ffcd00;
 }
 
-body {
-  background: radial-gradient(circle at 50% 10%, #1e293b 0%, #0f172a 60%, #020617 100%);
-  color: #f8fafc;
+html, body {
+  background-color: #090d16 !important;
+  background: radial-gradient(circle at 50% 10%, #1e293b 0%, #0f172a 60%, #020617 100%) !important;
+  color: #f8fafc !important;
   font-family: 'Be Vietnam Pro', sans-serif;
-  overflow-x: hidden;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 /* Glassmorphism Panel */
 .glass-museum {
-  background: var(--color-glass-card);
+  background: rgba(15, 23, 42, 0.85) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-glass-border);
@@ -49,8 +52,8 @@ body {
 }
 .glass-card-hover:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 205, 0, 0.4);
-  box-shadow: 0 10px 30px -10px rgba(255, 205, 0, 0.2);
+  border-color: rgba(255, 205, 0, 0.5);
+  box-shadow: 0 10px 30px -10px rgba(255, 205, 0, 0.25);
 }
 
 /* Red & Gold Glow Effects */
@@ -59,28 +62,29 @@ body {
 }
 
 .gold-glow {
-  box-shadow: 0 0 30px rgba(255, 205, 0, 0.2);
+  box-shadow: 0 0 30px rgba(255, 205, 0, 0.25);
 }
 
 .red-glow {
-  box-shadow: 0 0 30px rgba(200, 16, 46, 0.3);
+  box-shadow: 0 0 30px rgba(200, 16, 46, 0.35);
 }
 
-/* Hero Section Decorative Star */
-.vietnam-star-bg {
-  background-image: radial-gradient(circle, rgba(255, 205, 0, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
+/* Tab Navigation Active State */
+.nav-tab-btn.active {
+  color: #ffcd00 !important;
+  background-color: rgba(200, 16, 46, 0.2);
+  border-color: rgba(255, 205, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 205, 0, 0.2);
 }
 
-/* Magazine Columns */
-.magazine-column {
-  column-count: 1;
-  column-gap: 2rem;
+/* Section Switching Animations */
+@keyframes tabFadeIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
-@media (min-width: 768px) {
-  .magazine-column {
-    column-count: 2;
-  }
+
+.museum-tab-section {
+  animation: tabFadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Timeline Node Animations */
@@ -88,7 +92,7 @@ body {
   transition: all 0.3s ease;
 }
 .museum-timeline-node:hover {
-  transform: scale(1.15);
+  transform: scale(1.12);
   box-shadow: 0 0 20px rgba(255, 205, 0, 0.6);
 }
 
