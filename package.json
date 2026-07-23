@@ -1,0 +1,17 @@
+{
+  "name": "doi-moi-simulator",
+  "version": "1.0.0",
+  "description": "Mô phỏng Quyết sách Đổi mới (1986 - 2021) - Interactive Minigame",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.7.5"
+  }
+}
