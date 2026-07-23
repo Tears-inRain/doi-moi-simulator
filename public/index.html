@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Triển Lãm Tương Tác Số: 35 Năm Đổi Mới (1986 - 2021)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            flagRed: '#C8102E',
+            flagGold: '#FFCD00',
+            darkSlate: '#0F172A',
+            darkestSlate: '#020617'
+          },
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Custom Museum CSS -->
+  <link rel="stylesheet" href="/css/museum.css">
+</head>
+<body class="font-sans antialiased text-slate-100 vietnam-star-bg">
+
+  <!-- TOP MUSEUM NAVIGATION BAR -->
+  <header class="w-full bg-slate-950/90 border-b border-amber-500/30 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <a href="#hero" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-flagRed rounded-full flex items-center justify-center text-flagGold text-xl font-bold border-2 border-flagGold shadow-md group-hover:scale-105 transition">
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <div>
+          <h1 class="font-display font-black text-lg md:text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-flagGold via-amber-200 to-yellow-400">
+            35 NĂM ĐỔI MỚI
+          </h1>
+          <p class="text-[11px] text-slate-400 font-semibold tracking-wide">Triển Lãm Tương Tác Số (1986 - 2021)</p>
+        </div>
+      </a>
+
+      <!-- Nav Links -->
+      <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-slate-300">
+        <a href="#timeline" class="hover:text-flagGold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-timeline text-amber-400"></i> Tiến Trình
+        </a>
+        <a href="#data-visuals" class="hover:text-flagGold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-line text-emerald-400"></i> Dữ Liệu Số
+        </a>
+        <a href="#editorial" class="hover:text-flagGold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-newspaper text-sky-400"></i> Quyết Sách
+        </a>
+        <a href="#simulator" class="hover:text-flagGold transition flex items-center gap-1.5 text-flagGold">
+          <i class="fa-solid fa-gamepad"></i> Mô Phỏng Simulator
+        </a>
+      </nav>
+
+      <!-- Player Join Link -->
+      <div class="flex items-center space-x-3">
+        <a href="/player" target="_blank" class="bg-gradient-to-r from-flagRed to-amber-500 hover:brightness-110 text-white font-extrabold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 shadow-lg transition">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>Giao Diện Mobile Player</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- SECTION 1: HERO BANNER & QUOTE -->
+  <section id="hero" class="relative py-16 md:py-24 px-4 overflow-hidden">
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+      
+      <span class="px-4 py-1.5 rounded-full bg-flagRed/20 border border-flagRed text-red-400 font-mono font-extrabold text-xs uppercase tracking-widest inline-block mb-4">
+        TRIỂN LÃM TƯƠNG TÁC SỐ KỶ NIỆM 35 NĂM ĐỔI MỚI
+      </span>
+
+      <h1 class="font-display text-3xl sm:text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-flagGold via-yellow-200 to-amber-400 tracking-tight leading-tight mb-6">
+        HÀNH TRÌNH 35 NĂM ĐỔI MỚI<br>
+        <span class="text-white text-2xl sm:text-4xl md:text-5xl font-extrabold">(1986 – 2021)</span>
+      </h1>
+
+      <p class="text-sm md:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
+        Khảo sát toàn diện cơ đồ, tiềm lực, vị thế quốc tế và bản lĩnh lãnh đạo của Đảng Cộng sản Việt Nam từ Đại hội VI (12/1986) đến Đại hội XIII (1/2021).
+      </p>
+
+      <!-- FEATURED QUOTE BOX -->
+      <div class="glass-museum rounded-3xl p-6 md:p-8 border-2 border-flagGold max-w-4xl mx-auto gold-glow relative text-left">
+        <div class="absolute -top-5 left-8 w-10 h-10 bg-flagRed rounded-full flex items-center justify-center text-flagGold text-xl font-black border-2 border-flagGold">
+          <i class="fa-solid fa-quote-left"></i>
+        </div>
+
+        <blockquote class="text-base md:text-xl font-semibold text-amber-200 leading-relaxed pt-2 mb-4 italic">
+          "Đất nước ta chưa bao giờ có được cơ đồ, tiềm lực, vị thế và uy tín quốc tế như ngày nay."
+        </blockquote>
+
+        <div class="flex items-center justify-between border-t border-slate-700/60 pt-3 text-xs md:text-sm">
+          <div>
+            <span class="font-bold text-white block">Tổng Bí thư Nguyễn Phú Trọng</span>
+            <span class="text-slate-400 italic">Báo cáo Chính trị tại Đại hội XIII của Đảng (Tháng 1/2021)</span>
+          </div>
+          <span class="px-3 py-1 bg-slate-900 border border-slate-700 rounded-lg font-mono font-bold text-amber-400 text-[11px]">
+            Đại Hội XIII
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 2: REAL-TIME INTERACTIVE HISTORICAL TIMELINE (1986 - 2021) -->
+  <section id="timeline" class="py-16 px-4 bg-slate-950/60 border-y border-slate-800">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs uppercase font-extrabold tracking-widest text-amber-400 block mb-1">CÁC CỘT MỐC LỊCH SỬ NÒNG CỐT</span>
+        <h2 class="font-display text-2xl md:text-4xl font-black text-white">
+          Tiến Trình 35 Năm Phát Triển & Bứt Phá
+        </h2>
+        <p class="text-xs md:text-sm text-slate-400 mt-2">Nhấn vào từng cột mốc để mở xem tài liệu Giáo trình Lịch sử ĐCSVN & số liệu chi tiết</p>
+      </div>
+
+      <!-- TIMELINE NODES GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
+        
+        <!-- 1986 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="1986">
+          <div>
+            <span class="px-2.5 py-0.5 bg-flagRed text-white text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">1986</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">Đại Hội VI</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Khởi xướng Đổi mới toàn diện, xóa bỏ bao cấp.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+        <!-- 1988 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="1988">
+          <div>
+            <span class="px-2.5 py-0.5 bg-emerald-700 text-white text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">1988</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">Khoán 10</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Nghị quyết 10-NQ/TW cởi trói sản xuất nông nghiệp.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+        <!-- 1995 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="1995">
+          <div>
+            <span class="px-2.5 py-0.5 bg-blue-700 text-white text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">1995</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">Phá Cấm Vận</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Bình thường hóa quan hệ Mỹ & Gia nhập ASEAN.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+        <!-- 2007 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="2007">
+          <div>
+            <span class="px-2.5 py-0.5 bg-purple-700 text-white text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">2007</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">Gia Nhập WTO</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Thành viên thứ 150 WTO, hội nhập toàn cầu.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+        <!-- 2011 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="2011">
+          <div>
+            <span class="px-2.5 py-0.5 bg-amber-700 text-white text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">2011</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">3 Đột Phá</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Đại hội XI & 3 Đột phá chiến lược tái cơ cấu.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+        <!-- 2016 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="2016">
+          <div>
+            <span class="px-2.5 py-0.5 bg-rose-700 text-white text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">2016</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">Chỉnh Đốn Đảng</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Nghị quyết TW4 khóa XII, đẩy mạnh đốt lò.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+        <!-- 2021 Node -->
+        <div class="timeline-clickable-node glass-museum glass-card-hover rounded-2xl p-4 cursor-pointer border border-amber-500/30 flex flex-col justify-between" data-year="2021">
+          <div>
+            <span class="px-2.5 py-0.5 bg-yellow-600 text-slate-950 text-[11px] font-mono font-extrabold rounded-md block w-fit mb-2">2021</span>
+            <h3 class="font-bold text-sm text-amber-300 mb-1">Đại Hội XIII</h3>
+            <p class="text-[11px] text-slate-300 line-clamp-3">Tổng kết 35 năm & Khát vọng phát triển 2045.</p>
+          </div>
+          <div class="mt-3 text-[10px] text-amber-400 font-bold flex items-center gap-1">
+            <span>Chi tiết</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 3: DATA JOURNALISM & INFOGRAPHICS -->
+  <section id="data-visuals" class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs uppercase font-extrabold tracking-widest text-emerald-400 block mb-1">DỮ LIỆU BÁO CHÍ & BIỂU ĐỒ MINH HỌA</span>
+        <h2 class="font-display text-2xl md:text-4xl font-black text-white">
+          Những Con Số Biết Nói Qua 35 Năm Đổi Mới
+        </h2>
+        <p class="text-xs md:text-sm text-slate-400 mt-2">Dữ liệu kiểm chứng từ Giáo trình Lịch sử ĐCSVN & Tổng cục Thống kê</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        
+        <!-- CHART 1: INFLATION DROP -->
+        <div class="glass-museum rounded-3xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="font-display font-extrabold text-base text-amber-300">Tỷ Lệ Lạm Phát (1986 – 2020)</h3>
+              <p class="text-[11px] text-slate-400">Từ Siêu lạm phát phi mã đến Kiểm soát an toàn</p>
+            </div>
+            <span class="px-2.5 py-1 bg-red-950 border border-red-800 text-red-400 text-xs font-mono font-bold rounded-lg">
+              774,7% ➔ 3,2%
+            </span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartInflationTrend"></canvas>
+          </div>
+        </div>
+
+        <!-- CHART 2: POVERTY REDUCTION -->
+        <div class="glass-museum rounded-3xl p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="font-display font-extrabold text-base text-emerald-300">Tỷ Lệ Giảm Nghèo Đa Chiều</h3>
+              <p class="text-[11px] text-slate-400">Thành tựu xóa đói giảm nghèo được Liên Hợp Quốc vinh danh</p>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-mono font-bold rounded-lg">
+              >60% ➔ <2,75%
+            </span>
+          </div>
+          <div class="chart-container">
+            <canvas id="chartPovertyTrend"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- KPI METRIC CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Rice Export Card -->
+        <div class="glass-museum rounded-2xl p-5 border border-amber-500/30">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-400 text-lg mb-3">
+            <i class="fa-solid fa-wheat-awn"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-200 mb-1">An Ninh Lương Thực</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            Trước 1988: Nhập khẩu 450.000 – 1.000.000 tấn gạo/năm để cứu đói.<br>
+            Sau Khoán 10: Vươn lên <strong>Top 3 cường quốc xuất khẩu gạo thế giới</strong> (hơn 6,5 triệu tấn/năm).
+          </p>
+          <span class="text-[11px] font-mono font-bold text-amber-300">Nghị quyết 10-NQ/TW (1988)</span>
+        </div>
+
+        <!-- GDP Growth Card -->
+        <div class="glass-museum rounded-2xl p-5 border border-blue-500/30">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400 flex items-center justify-center text-blue-400 text-lg mb-3">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-200 mb-1">Tăng Trưởng Kinh Tế GDP</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            Giai đoạn 1991–1995: Tăng trưởng GDP bình quân đạt <strong>8,2%/năm</strong>.<br>
+            Quy mô nền kinh tế thuộc Top 4 khu vực ASEAN đến năm 2020.
+          </p>
+          <span class="text-[11px] font-mono font-bold text-blue-300">Đại hội VII & VIII</span>
+        </div>
+
+        <!-- Anti-Corruption Pillars Card -->
+        <div class="glass-museum rounded-2xl p-5 border border-rose-500/30">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-400 flex items-center justify-center text-rose-400 text-lg mb-3">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h4 class="font-bold text-sm text-slate-200 mb-1">Chỉnh Đốn Đảng & Đốt Lò</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            3 Trụ cột: Xóa bỏ nguyên nhân chủ quan ➔ Triệt tiêu tác hại lợi ích nhóm ➔ Thi hành kỷ cương <em>"Không có vùng cấm"</em>.
+          </p>
+          <span class="text-[11px] font-mono font-bold text-rose-300">Nghị quyết TW 4 (Khóa XII)</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 4: EDITORIAL MAGAZINE LAYOUT -->
+  <section id="editorial" class="py-16 px-4 bg-slate-950/70 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs uppercase font-extrabold tracking-widest text-sky-400 block mb-1">CHUYÊN ĐỀ BÁO CHÍ VĂN CHIỆN</span>
+        <h2 class="font-display text-2xl md:text-4xl font-black text-white">
+          Các Quyết Sách Lịch Sử Đổi Thay Vận Mệnh Đất Nước
+        </h2>
+      </div>
+
+      <!-- MAGAZINE ARTICLES GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Article 1 -->
+        <article class="glass-museum rounded-3xl p-6 border border-slate-800 hover:border-amber-500/40 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2.5 py-0.5 rounded bg-flagRed text-white font-mono text-[10px] font-bold">ĐẠI HỘI VI (1986)</span>
+            <span class="text-xs text-slate-400">Chuyên đề 01</span>
+          </div>
+          <h3 class="font-display font-extrabold text-lg text-amber-300 mb-3">
+            Đêm Trước Đổi Mới & Bước Ngoặt Đại Hội VI (12/1986)
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Đại hội VI họp tại Hà Nội (từ ngày 15 đến 18-12-1986) đã phân tích sâu sắc thực trạng khủng hoảng kinh tế - xã hội, rút ra bài học kinh nghiệm lớn: <em>"Đảng phải luôn xuất phát từ thực tế, tôn trọng và hành động theo quy luật khách quan"</em>. Đại hội thông qua đường lối Đổi mới toàn diện, tập trung vào Ba chương trình kinh tế lớn.
+          </p>
+          <span class="text-[11px] text-slate-400 italic">Trích Giáo trình Lịch sử ĐCSVN - Chương III, Mục I</span>
+        </article>
+
+        <!-- Article 2 -->
+        <article class="glass-museum rounded-3xl p-6 border border-slate-800 hover:border-amber-500/40 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2.5 py-0.5 rounded bg-emerald-700 text-white font-mono text-[10px] font-bold">KHOÁN 10 (1988)</span>
+            <span class="text-xs text-slate-400">Chuyên đề 02</span>
+          </div>
+          <h3 class="font-display font-extrabold text-lg text-amber-300 mb-3">
+            Từ Quốc Gia Thiếu Ăn Đến Kỳ Tích Nông Nghiệp Tự Cấp Lương Thực
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Nghị quyết 10-NQ/TW của Bộ Chính trị khóa VI (4/1988) đã cởi trói tư duy quản lý nông nghiệp. Bằng việc công nhận hộ nông dân là đơn vị kinh tế tự chủ, giao quyền sử dụng đất lâu dài và tự do lưu thông nông sản, sức sản xuất của hàng chục triệu nông dân được giải phóng triệt để.
+          </p>
+          <span class="text-[11px] text-slate-400 italic">Trích Giáo trình Lịch sử ĐCSVN - Chương III, Mục I</span>
+        </article>
+
+        <!-- Article 3 -->
+        <article class="glass-museum rounded-3xl p-6 border border-slate-800 hover:border-amber-500/40 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2.5 py-0.5 rounded bg-blue-700 text-white font-mono text-[10px] font-bold">ĐỐI NGOẠI (1995 & 2007)</span>
+            <span class="text-xs text-slate-400">Chuyên đề 03</span>
+          </div>
+          <h3 class="font-display font-extrabold text-lg text-amber-300 mb-3">
+            Bản Đồ Hội Nhập Quốc Tế: Phá Bỏ Cấm Vận & Vươn Ra Biển Lớn
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Phương châm <em>"Việt Nam muốn là bạn với tất cả các nước trong cộng đồng thế giới, phấn đấu vì hòa bình, độc lập và phát triển"</em> đã giúp đất nước bình thường hóa quan hệ với Mỹ (1995), gia nhập ASEAN (1995) và trở thành thành viên 150 WTO (2007).
+          </p>
+          <span class="text-[11px] text-slate-400 italic">Trích Giáo trình Lịch sử ĐCSVN - Chương III, Mục II</span>
+        </article>
+
+        <!-- Article 4 -->
+        <article class="glass-museum rounded-3xl p-6 border border-slate-800 hover:border-amber-500/40 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2.5 py-0.5 rounded bg-rose-700 text-white font-mono text-[10px] font-bold">CHỈNH ĐỐN ĐẢNG (2016)</span>
+            <span class="text-xs text-slate-400">Chuyên đề 04</span>
+          </div>
+          <h3 class="font-display font-extrabold text-lg text-amber-300 mb-3">
+            Đấu Tranh Phòng, Chống Tham Nhũng: Giữ Vững Niềm Tin Của Nhân Dân
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Nghị quyết Trung ương 4 (Khóa XII) nhấn mạnh công tác xây dựng, chỉnh đốn Đảng là nhiệm vụ then chốt. Cuộc đấu tranh phòng, chống tham nhũng, tiêu cực với phương châm <em>"Không có vùng cấm, không có ngoại lệ"</em> đã tạo chuyển biến mạnh mẽ, siết chặt kỷ cương bộ máy nhà nước.
+          </p>
+          <span class="text-[11px] text-slate-400 italic">Trích Giáo trình Lịch sử ĐCSVN - Chương III, Mục III</span>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 5: INTEGRATED DOI MOI DECISION SIMULATOR (MINIGAME HUB) -->
+  <section id="simulator" class="py-16 px-4 bg-slate-950 border-t-2 border-flagGold relative">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- SIMULATOR TITLE HEADER -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center space-x-2 bg-flagRed/20 border border-flagRed px-4 py-1.5 rounded-full mb-3">
+          <i class="fa-solid fa-gamepad text-flagGold"></i>
+          <span class="text-xs font-mono font-extrabold text-red-400 uppercase tracking-widest">MINIGAME SIMULATOR TRỰC TUYẾN</span>
+        </div>
+        <h2 class="font-display text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-flagGold via-yellow-200 to-amber-400">
+          MÔ PHỎNG QUYẾT SÁCH ĐỔI MỚI (1986 - 2021)
+        </h2>
+        <p class="text-xs md:text-sm text-slate-400 mt-2 max-w-2xl mx-auto">
+          Hội đồng Chiến lược Quốc gia: Hãy điều khiển các chỉ số phát triển bằng cách lựa chọn quyết sách qua mobile!
+        </p>
+      </div>
+
+      <!-- EMBEDDED HOST DASHBOARD CONTAINER -->
+      <div class="glass-museum rounded-3xl p-4 md:p-6 border border-amber-500/40 shadow-2xl">
+        
+        <!-- DASHBOARD TOP HEADER & METRICS -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
+          <div class="flex items-center space-x-3">
+            <div id="roomBadge" class="bg-slate-900 border border-amber-500/40 rounded-xl px-3 py-1.5 flex items-center space-x-2">
+              <span class="text-xs text-slate-400 uppercase font-semibold">Mã Phòng:</span>
+              <span id="displayRoomId" class="font-mono text-lg font-bold text-flagGold">----</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 flex items-center space-x-2">
+              <i class="fa-solid fa-users text-emerald-400 text-sm"></i>
+              <span id="playerCountDisplay" class="font-bold text-slate-200">0</span>
+              <span class="text-xs text-slate-400">Thành viên</span>
+            </div>
+          </div>
+
+          <button id="toggleQrBtn" class="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 transition shadow">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>Mã QR Tham Gia</span>
+          </button>
+        </div>
+
+        <!-- LIVE METRICS GAUGE BAR -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-xs">
+          <!-- GDP Gauge -->
+          <div class="bg-slate-900/90 rounded-xl p-3 border border-blue-500/30 flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-blue-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-chart-line"></i> GDP Kinh Tế
+              </span>
+              <span id="gdpValDisplay" class="font-mono text-sm font-extrabold text-blue-300">50/100</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+              <div id="gdpBar" class="bg-gradient-to-r from-blue-600 to-cyan-400 h-full metric-transition rounded-full" style="width: 50%;"></div>
+            </div>
+          </div>
+
+          <!-- Quality of Life Gauge -->
+          <div class="bg-slate-900/90 rounded-xl p-3 border border-rose-500/30 flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-rose-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-heart-pulse"></i> Đời Sống Dân
+              </span>
+              <span id="qolValDisplay" class="font-mono text-sm font-extrabold text-rose-300">30/100</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+              <div id="qolBar" class="bg-gradient-to-r from-rose-600 to-emerald-400 h-full metric-transition rounded-full" style="width: 30%;"></div>
+            </div>
+          </div>
+
+          <!-- International Standing Gauge -->
+          <div class="bg-slate-900/90 rounded-xl p-3 border border-amber-500/30 flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-globe"></i> Vị Thế Quốc Tế
+              </span>
+              <span id="statusValDisplay" class="font-mono text-sm font-extrabold text-amber-300">20/100</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+              <div id="statusBar" class="bg-gradient-to-r from-amber-600 to-yellow-300 h-full metric-transition rounded-full" style="width: 20%;"></div>
+            </div>
+          </div>
+
+          <!-- Inflation Rate Card -->
+          <div id="inflationCard" class="bg-slate-900/90 rounded-xl p-3 border border-red-500/50 flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-red-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-fire-flame-curved"></i> Lạm Phát (%)
+              </span>
+              <span id="inflationBadge" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-950 text-red-400 border border-red-800 animate-pulse">Siêu Lạm Phát</span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <span id="inflationValDisplay" class="font-mono text-lg font-black text-red-400">774.7%</span>
+              <span class="text-[10px] text-slate-400">Ban đầu 1986</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIMULATOR TIMELINE PROGRESS BAR -->
+        <div class="mb-6 bg-slate-900/80 rounded-xl p-3 border border-slate-800">
+          <div class="flex justify-between items-center relative overflow-x-auto py-1">
+            <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-slate-800 z-0"></div>
+            <div id="simTimelineProgress" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-flagRed via-flagGold to-emerald-400 z-0 transition-all duration-500" style="width: 0%;"></div>
+
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-0" class="w-8 h-8 rounded-full bg-red-600 border-2 border-amber-400 flex items-center justify-center font-extrabold text-[11px] text-amber-300 shadow">86</div><span class="text-[10px] font-bold text-amber-300 mt-1">1986</span></div>
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-1" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center font-extrabold text-[11px] text-slate-400">88</div><span class="text-[10px] font-bold text-slate-400 mt-1">1988</span></div>
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-2" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center font-extrabold text-[11px] text-slate-400">95</div><span class="text-[10px] font-bold text-slate-400 mt-1">1995</span></div>
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-3" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center font-extrabold text-[11px] text-slate-400">07</div><span class="text-[10px] font-bold text-slate-400 mt-1">2007</span></div>
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-4" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center font-extrabold text-[11px] text-slate-400">11</div><span class="text-[10px] font-bold text-slate-400 mt-1">2011</span></div>
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-5" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center font-extrabold text-[11px] text-slate-400">16</div><span class="text-[10px] font-bold text-slate-400 mt-1">2016</span></div>
+            <div class="relative z-10 flex flex-col items-center"><div id="simNode-6" class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center font-extrabold text-[11px] text-slate-400">21</div><span class="text-[10px] font-bold text-slate-400 mt-1">2021</span></div>
+          </div>
+        </div>
+
+        <!-- SIMULATOR GAME VIEW STAGE -->
+        <div id="simGameView" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Scenario Brief Stage -->
+          <div class="lg:col-span-7 flex flex-col gap-4">
+            <div class="bg-slate-900/90 rounded-2xl p-5 border border-red-500/40 red-glow">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                <span id="scenarioYearTag" class="px-2.5 py-1 bg-flagRed text-white font-mono font-extrabold rounded text-xs">
+                  BỐI CẢNH 1986
+                </span>
+                <span id="scenarioIndexTag" class="text-xs text-slate-400 font-semibold">Kịch bản 1/7</span>
+              </div>
+              <h3 id="scenarioTitle" class="font-display text-lg md:text-xl font-black text-amber-300 mb-2">
+                Đêm trước Đổi mới (Khủng hoảng Lạm phát & Lương thực)
+              </h3>
+              <p id="scenarioContext" class="text-xs text-slate-300 italic bg-slate-950 p-3 rounded-lg border-l-2 border-flagGold mb-3 leading-relaxed">
+                Lạm phát chạm mốc kỷ lục 774,7%, đất nước thiếu ăn kinh niên, hàng hóa khan hiếm...
+              </p>
+              <div class="bg-red-950/40 border border-red-600/40 rounded-xl p-3">
+                <span class="text-[10px] uppercase font-bold text-red-400 block mb-1">Vấn đề quyết sách đặt ra:</span>
+                <p id="scenarioProblem" class="text-xs md:text-sm font-bold text-white">
+                  Hội nghị Đại hội VI cần đưa ra định hướng chiến lược nào để cứu nền kinh tế?
+                </p>
+              </div>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="bg-slate-900/90 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 border border-slate-800">
+              <div class="flex items-center space-x-2 text-xs font-bold text-amber-400 bg-amber-950/40 px-3 py-1.5 rounded-lg border border-amber-800/40">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span id="votingStatusText">Đang chờ Host mở bình chọn...</span>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <button id="startScenarioBtn" class="bg-gradient-to-r from-flagRed to-red-700 hover:brightness-110 text-white font-extrabold px-4 py-2 rounded-xl text-xs flex items-center space-x-1.5 shadow">
+                  <i class="fa-solid fa-play"></i><span>Mở Bình Chọn</span>
+                </button>
+                <button id="revealOutcomeBtn" class="hidden bg-gradient-to-r from-flagGold to-amber-500 text-slate-950 font-black px-5 py-2 rounded-xl text-xs flex items-center space-x-1.5 shadow animate-pulse">
+                  <i class="fa-solid fa-gavel"></i><span>CHỐT QUYẾT SÁCH</span>
+                </button>
+                <button id="nextScenarioBtn" class="hidden bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-1.5 shadow">
+                  <span>Tiếp Theo</span><i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-time Vote Breakdown & Options -->
+          <div class="lg:col-span-5 flex flex-col gap-4">
+            <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 flex flex-col justify-between h-full">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                <h4 class="font-bold text-xs text-slate-200 flex items-center gap-1.5">
+                  <i class="fa-solid fa-check-to-slot text-amber-400"></i> Biểu Đồ Bình Chọn Real-time
+                </h4>
+                <span id="totalVotesBadge" class="bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold">0 Phiếu</span>
+              </div>
+
+              <!-- Option A -->
+              <div class="mb-3 bg-slate-950 rounded-xl p-2.5 border border-slate-800">
+                <p id="optionAText" class="text-[11px] text-slate-300 line-clamp-2 mb-1.5">Đang tải Lựa chọn A...</p>
+                <div class="flex items-center space-x-2">
+                  <div class="grow bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                    <div id="barA" class="bg-gradient-to-r from-blue-600 to-indigo-500 h-full transition-all duration-500 rounded-full" style="width: 0%;"></div>
+                  </div>
+                  <span id="pctA" class="font-mono font-bold text-xs text-blue-400 w-10 text-right">0%</span>
+                </div>
+              </div>
+
+              <!-- Option B -->
+              <div class="mb-3 bg-slate-950 rounded-xl p-2.5 border border-slate-800">
+                <p id="optionBText" class="text-[11px] text-slate-300 line-clamp-2 mb-1.5">Đang tải Lựa chọn B...</p>
+                <div class="flex items-center space-x-2">
+                  <div class="grow bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                    <div id="barB" class="bg-gradient-to-r from-flagGold to-amber-400 h-full transition-all duration-500 rounded-full" style="width: 0%;"></div>
+                  </div>
+                  <span id="pctB" class="font-mono font-bold text-xs text-amber-400 w-10 text-right">0%</span>
+                </div>
+              </div>
+
+              <!-- Option C -->
+              <div class="mb-3 bg-slate-950 rounded-xl p-2.5 border border-slate-800">
+                <p id="optionCText" class="text-[11px] text-slate-300 line-clamp-2 mb-1.5">Đang tải Lựa chọn C...</p>
+                <div class="flex items-center space-x-2">
+                  <div class="grow bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                    <div id="barC" class="bg-gradient-to-r from-purple-600 to-pink-500 h-full transition-all duration-500 rounded-full" style="width: 0%;"></div>
+                  </div>
+                  <span id="pctC" class="font-mono font-bold text-xs text-purple-400 w-10 text-right">0%</span>
+                </div>
+              </div>
+
+              <!-- Leaderboard Preview -->
+              <div class="border-t border-slate-800 pt-2">
+                <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1.5">Bảng Xếp Hạng Đóng Góp:</span>
+                <div id="topPlayersList" class="flex flex-wrap gap-1.5">
+                  <span class="text-slate-500 italic text-[11px]">Đang chờ thành viên tham gia...</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SIMULATOR FINAL SUMMARY VIEW -->
+        <div id="simFinalSummaryView" class="hidden text-center py-8">
+          <h3 id="finalTitleRating" class="font-display text-2xl md:text-3xl font-black text-amber-300 mb-2">Kiến Trúc Sư Đổi Mới Xuất Sắc</h3>
+          <p id="finalSummaryText" class="text-xs md:text-sm text-slate-300 italic max-w-2xl mx-auto mb-6">
+            Dưới sự chỉ đạo sáng suốt của Hội đồng Chiến lược, đất nước Việt Nam đã trải qua 35 năm Đổi mới đầy tự hào.
+          </p>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto mb-6 text-xs">
+            <div class="bg-slate-900 p-3 rounded-xl border border-blue-500/40"><span>GDP:</span> <strong id="finalGdp" class="text-blue-300 block text-base">95/100</strong></div>
+            <div class="bg-slate-900 p-3 rounded-xl border border-rose-500/40"><span>Đời Sống:</span> <strong id="finalQol" class="text-rose-300 block text-base">90/100</strong></div>
+            <div class="bg-slate-900 p-3 rounded-xl border border-amber-500/40"><span>Vị Thế:</span> <strong id="finalStatus" class="text-amber-300 block text-base">95/100</strong></div>
+            <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/40"><span>Lạm Phát:</span> <strong id="finalInflation" class="text-emerald-300 block text-base">3.2%</strong></div>
+          </div>
+
+          <div class="mb-6">
+            <h4 class="text-xs uppercase font-bold text-amber-400 mb-2">Các Cột Mốc Đã Đạt Được:</h4>
+            <div id="finalMilestonesList" class="flex flex-wrap justify-center gap-2"></div>
+          </div>
+
+          <button id="restartGameBtn" class="bg-gradient-to-r from-flagRed to-amber-500 text-white font-black px-6 py-2.5 rounded-xl text-xs shadow-lg">
+            <i class="fa-solid fa-rotate-right mr-1"></i> Chơi Lại Mô Phỏng Từ 1986
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-slate-950 border-t border-slate-800 py-8 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <p class="font-bold text-slate-400">Mô Phỏng Quyết Sách Đổi Mới (1986 - 2021) • Triển Lãm Tương Tác Số</p>
+        <p class="text-[11px] text-slate-500">Căn cứ văn kiện Giáo trình Lịch sử Đảng cộng sản Việt Nam</p>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="#hero" class="hover:text-flagGold transition">Đầu Trang</a>
+        <a href="/player" target="_blank" class="hover:text-flagGold transition">Mobile Player</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TIMELINE DRILL-DOWN MODAL WINDOW -->
+  <div id="museumTimelineModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-museum max-w-2xl w-full rounded-3xl p-6 md:p-8 border-2 border-flagGold shadow-2xl relative animate-museum-modal max-h-[90vh] overflow-y-auto">
+      
+      <button id="closeMuseumModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <span id="modalYearTag" class="px-3 py-1 rounded-full bg-flagRed/20 border border-flagRed text-red-400 font-mono font-extrabold text-xs inline-block mb-3">
+        NĂM 1986 • BƯỚC NGOẶT LỊCH SỬ
+      </span>
+
+      <h2 id="modalTitle" class="font-display text-xl md:text-2xl font-black text-amber-300 mb-3 leading-snug">
+        Khởi Xướng Công Cuộc Đổi Mới Toàn Diện (Đại Hội VI)
+      </h2>
+
+      <!-- Quote Box -->
+      <div class="bg-slate-950/90 border-l-4 border-flagGold rounded-r-xl p-4 mb-4 italic text-xs md:text-sm text-amber-200">
+        <span id="modalQuote">"Đại hội VI của Đảng (12/1986) là Đại hội mở đầu..."</span>
+      </div>
+
+      <!-- Stats Grid -->
+      <div id="modalStatsGrid" class="grid grid-cols-3 gap-2.5 mb-4"></div>
+
+      <!-- Historical Analysis Details -->
+      <div id="modalDetailsText" class="text-xs md:text-sm text-slate-300 leading-relaxed border-t border-slate-800 pt-4 mb-4"></div>
+
+      <!-- Textbook Citation -->
+      <div class="text-right border-t border-slate-800/80 pt-3">
+        <span id="modalCitation" class="text-[11px] text-slate-400 italic bg-slate-950 px-3 py-1 rounded border border-slate-800 inline-block">
+          Giáo trình Lịch sử ĐCSVN - Chương III, Mục I
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QR CODE MODAL OVERLAY -->
+  <div id="qrModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-museum max-w-sm w-full rounded-3xl p-6 text-center border border-flagGold shadow-2xl relative">
+      <button id="closeQrModalBtn" class="absolute top-3 right-3 text-slate-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 class="font-display font-black text-amber-300 text-lg mb-1">QUÉT MÃ QR THAM GIA</h3>
+      <p class="text-xs text-slate-400 mb-4">Dùng camera điện thoại để kết nối Hội đồng</p>
+
+      <div class="bg-white p-3 rounded-2xl inline-block shadow-inner mb-4">
+        <img id="qrCodeImg" src="" alt="QR Code" class="w-48 h-48 mx-auto">
+      </div>
+
+      <div class="bg-slate-900 rounded-xl p-2.5 border border-slate-800 mb-3">
+        <span class="text-[11px] text-slate-400 block">Hoặc truy cập link:</span>
+        <span id="qrJoinUrlText" class="font-mono text-xs text-flagGold font-bold select-all break-all">---</span>
+      </div>
+
+      <p class="text-[11px] text-emerald-400 font-semibold">
+        <i class="fa-solid fa-wifi mr-1"></i> Thiết bị cùng kết nối mạng Wi-Fi/Tailscale
+      </p>
+    </div>
+  </div>
+
+  <!-- OUTCOME MODAL OVERLAY -->
+  <div id="outcomeModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-museum max-w-2xl w-full rounded-3xl p-6 md:p-8 border-2 border-flagGold shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button id="closeOutcomeModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="text-center mb-4">
+        <span class="px-3 py-1 rounded-full bg-flagRed/20 border border-flagRed text-red-400 font-extrabold text-[10px] uppercase tracking-widest inline-block mb-1">KẾT QUẢ QUYẾT SÁCH</span>
+        <h3 id="outcomeWinnerTitle" class="font-display text-xl md:text-2xl font-black text-amber-300">Lựa Chọn B Được Thông Qua!</h3>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-4 text-center text-xs">
+        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800"><span>GDP:</span> <span id="gdpImpactTag" class="font-mono text-lg font-black text-emerald-400 block">+25</span></div>
+        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800"><span>Đời Sống:</span> <span id="qolImpactTag" class="font-mono text-lg font-black text-emerald-400 block">+20</span></div>
+        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800"><span>Vị Thế:</span> <span id="statusImpactTag" class="font-mono text-lg font-black text-emerald-400 block">+10</span></div>
+        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800"><span>Lạm Phát:</span> <span id="inflationImpactTag" class="font-mono text-lg font-black text-sky-400 block">-400%</span></div>
+      </div>
+
+      <div id="milestoneContainer" class="hidden mb-4 bg-amber-950/80 border border-flagGold rounded-xl p-3 text-center">
+        <i class="fa-solid fa-award text-2xl text-flagGold mb-1"></i>
+        <h4 id="milestoneTitle" class="font-bold text-sm text-white">Kỷ Nguyên Đổi Mới VI</h4>
+      </div>
+
+      <div class="bg-slate-900 border-l-4 border-flagRed rounded-r-xl p-4 mb-4 text-xs text-slate-200">
+        <p id="historicalFeedbackText" class="mb-2">CHÍNH XÁC! Mở ra kỷ nguyên Đổi mới toàn diện.</p>
+        <span id="textbookCitation" class="text-[10px] text-slate-400 italic block text-right">Giáo trình Lịch sử ĐCSVN</span>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="modalContinueBtn" class="bg-gradient-to-r from-flagGold to-amber-500 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs shadow hover:brightness-110 transition flex items-center gap-1.5">
+          <span>Tiếp Tục Diễn Tiến</span><i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio & Museum Logic -->
+  <script src="/js/audio.js"></script>
+  <script src="/js/museum.js"></script>
+</body>
+</html>

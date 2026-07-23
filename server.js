@@ -10,6 +10,8 @@ const SCENARIOS = require('./data/scenarios');
 
 const app = express();
 const server = http.createServer(app);
+
+// Socket.io with wildcard CORS for Cloudflare Tunnel & local network access
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -20,6 +22,15 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Explicit Routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'player.html'));
+});
 
 // Helper to get local network IP address
 function getLocalIp() {
@@ -120,7 +131,10 @@ io.on('connection', (socket) => {
     });
 
     // Update host player list
-    const playerList = Object.values(room.players).map(p => ({ nickname: p.nickname, score: p.score, avatar: p.avatar }));
+    const playerList = Object.values(room.players)
+      .map(p => ({ nickname: p.nickname, score: p.score, avatar: p.avatar }))
+      .sort((a, b) => b.score - a.score);
+
     io.to(room.hostSocketId).emit('host:player_list_updated', {
       playersCount: playerList.length,
       players: playerList
@@ -328,7 +342,6 @@ io.on('connection', (socket) => {
       // Game Over -> Final Summary Screen
       room.gameState.votingState = "END_GAME";
 
-      // Compute final evaluation
       const { economyGDP, qualityOfLife, globalStatus } = room.gameState.metrics;
       const totalScore = economyGDP + qualityOfLife + globalStatus;
       
@@ -394,11 +407,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    // Clean up or inform room
     for (const [roomId, room] of Object.entries(rooms)) {
       if (room.players[socket.id]) {
         delete room.players[socket.id];
-        const playerList = Object.values(room.players).map(p => ({ nickname: p.nickname, score: p.score, avatar: p.avatar }));
+        const playerList = Object.values(room.players)
+          .map(p => ({ nickname: p.nickname, score: p.score, avatar: p.avatar }))
+          .sort((a, b) => b.score - a.score);
+
         io.to(room.hostSocketId).emit('host:player_list_updated', {
           playersCount: playerList.length,
           players: playerList
@@ -410,9 +425,9 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
   console.log(`===================================================`);
-  console.log(`🚀 MÔ PHỎNG QUYẾT SÁCH ĐỔI MỚI (1986 - 2021) SERVER`);
+  console.log(`🏛️  TRIỂN LÃM SỐ & MÔ PHỎNG QUYẾT SÁCH ĐỔI MỚI (1986 - 2021)`);
   console.log(`---------------------------------------------------`);
-  console.log(`👉 Host Dashboard: http://localhost:${PORT}/host.html`);
-  console.log(`👉 Player Access  : http://${HOST_IP}:${PORT}/player.html`);
+  console.log(`👉 Museum & Host Hub : http://localhost:${PORT}/`);
+  console.log(`👉 Player Access     : http://${HOST_IP}:${PORT}/player`);
   console.log(`===================================================`);
 });
