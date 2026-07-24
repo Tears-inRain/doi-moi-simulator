@@ -150,6 +150,15 @@ function createInitialGameState() {
   };
 }
 
+// Robust helper to lookup active room by ID (case & whitespace insensitive)
+function getRoom(roomId) {
+  if (!roomId) return null;
+  let cleanId = typeof roomId === 'object' ? (roomId.roomId || '') : roomId;
+  if (!cleanId) return null;
+  const key = Object.keys(rooms).find(r => r.toUpperCase() === cleanId.toString().trim().toUpperCase());
+  return key ? rooms[key] : null;
+}
+
 io.on('connection', (socket) => {
   console.log(`[Socket] Client connected: ${socket.id}`);
 
@@ -195,13 +204,13 @@ io.on('connection', (socket) => {
 
   // Player joins room
   socket.on('player:join', ({ roomId, nickname, avatar }) => {
-    const roomKey = Object.keys(rooms).find(r => r.toUpperCase() === (roomId || '').toUpperCase());
-    const room = rooms[roomKey];
+    const room = getRoom(roomId);
 
     if (!room) {
       return socket.emit('player:join_error', { message: 'Mã phòng không tồn tại hoặc đã đóng!' });
     }
 
+    const roomKey = room.roomId;
     const cleanNick = (nickname || 'Cố vấn').trim();
     room.players[socket.id] = {
       socketId: socket.id,
@@ -234,9 +243,13 @@ io.on('connection', (socket) => {
   });
 
   // Host starts the game / first scenario
-  socket.on('host:start_game', ({ roomId }) => {
-    const room = rooms[roomId];
-    if (!room) return;
+  socket.on('host:start_game', (payload) => {
+    const targetId = payload && payload.roomId ? payload.roomId : payload;
+    const room = getRoom(targetId);
+    if (!room) {
+      console.error(`[Game] host:start_game failed - room not found for payload:`, payload);
+      return;
+    }
 
     room.gameState.currentScenarioIndex = 0;
     room.gameState.votingState = "VOTING";
@@ -246,19 +259,20 @@ io.on('connection', (socket) => {
     // Reset player votes
     Object.values(room.players).forEach(p => p.currentVote = null);
 
-    io.to(roomId).emit('scenario:started', {
+    io.to(room.roomId).emit('scenario:started', {
       scenarioIndex: 0,
       scenario: currentScenario,
       gameState: room.gameState,
       totalScenarios: SCENARIOS.length
     });
 
-    console.log(`[Game] Room ${roomId} started Scenario 1 (${currentScenario.year})`);
+    console.log(`[Game] Room ${room.roomId} started Scenario 1 (${currentScenario.year})`);
   });
 
   // Player casts vote
-  socket.on('player:cast_vote', ({ roomId, scenarioIndex, optionId }) => {
-    const room = rooms[roomId];
+  socket.on('player:cast_vote', (payload) => {
+    const { roomId, scenarioIndex, optionId } = payload || {};
+    const room = getRoom(roomId);
     if (!room || room.gameState.votingState !== 'VOTING') return;
 
     const player = room.players[socket.id];
@@ -293,9 +307,13 @@ io.on('connection', (socket) => {
   });
 
   // Host reveals outcome
-  socket.on('host:reveal_outcome', ({ roomId }) => {
-    const room = rooms[roomId];
-    if (!room || room.gameState.votingState !== 'VOTING') return;
+  socket.on('host:reveal_outcome', (payload) => {
+    const targetId = payload && payload.roomId ? payload.roomId : payload;
+    const room = getRoom(targetId);
+    if (!room || room.gameState.votingState !== 'VOTING') {
+      console.error(`[Game] host:reveal_outcome failed - room not found or not in VOTING state:`, payload);
+      return;
+    }
 
     const currentScenario = SCENARIOS[room.gameState.currentScenarioIndex];
 
@@ -401,7 +419,7 @@ io.on('connection', (socket) => {
       players: fullLeaderboard
     });
 
-    io.to(roomId).emit('scenario:outcome', {
+    io.to(room.roomId).emit('scenario:outcome', {
       scenario: currentScenario,
       winningOption: selectedOption,
       winningOptionId,
@@ -418,15 +436,20 @@ io.on('connection', (socket) => {
       leaderboard: fullLeaderboard.slice(0, 10)
     });
 
-    console.log(`[Game] Scenario ${currentScenario.year} revealed. Winning Option: ${winningOptionId}`);
+    console.log(`[Game] Scenario ${currentScenario.year} revealed in room ${room.roomId}. Winning Option: ${winningOptionId}`);
   });
 
   // Host advances to next scenario
-  socket.on('host:next_scenario', ({ roomId }) => {
-    const room = rooms[roomId];
-    if (!room) return;
+  socket.on('host:next_scenario', (payload) => {
+    const targetId = payload && payload.roomId ? payload.roomId : payload;
+    const room = getRoom(targetId);
+    if (!room) {
+      console.error(`[Game] host:next_scenario failed - room not found for payload:`, payload);
+      return;
+    }
 
     const nextIndex = room.gameState.currentScenarioIndex + 1;
+    console.log(`[Game] Advancing room ${room.roomId} to scenario index ${nextIndex}/${SCENARIOS.length}`);
 
     if (nextIndex >= SCENARIOS.length) {
       // Game Over -> Final Summary Screen
@@ -449,7 +472,7 @@ io.on('connection', (socket) => {
         .sort((a, b) => b.score - a.score)
         .map(p => ({ nickname: p.nickname, score: p.score, avatar: p.avatar }));
 
-      io.to(roomId).emit('game:ended', {
+      io.to(room.roomId).emit('game:ended', {
         gameState: room.gameState,
         finalMetrics: room.gameState.metrics,
         finalInflation: room.gameState.inflationRate,
@@ -460,7 +483,7 @@ io.on('connection', (socket) => {
         leaderboard
       });
 
-      console.log(`[Game] Room ${roomId} ended game session.`);
+      console.log(`[Game] Room ${room.roomId} ended game session.`);
     } else {
       room.gameState.currentScenarioIndex = nextIndex;
       room.gameState.votingState = "VOTING";
@@ -469,14 +492,14 @@ io.on('connection', (socket) => {
 
       Object.values(room.players).forEach(p => p.currentVote = null);
 
-      io.to(roomId).emit('scenario:started', {
+      io.to(room.roomId).emit('scenario:started', {
         scenarioIndex: nextIndex,
         scenario: currentScenario,
         gameState: room.gameState,
         totalScenarios: SCENARIOS.length
       });
 
-      console.log(`[Game] Room ${roomId} advanced to Scenario ${nextIndex + 1} (${currentScenario.year})`);
+      console.log(`[Game] Room ${room.roomId} advanced to Scenario ${nextIndex + 1} (${currentScenario.year})`);
     }
   });
 
