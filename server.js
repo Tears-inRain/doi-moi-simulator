@@ -150,13 +150,29 @@ function createInitialGameState() {
   };
 }
 
-// Robust helper to lookup active room by ID (case & whitespace insensitive)
-function getRoom(roomId) {
-  if (!roomId) return null;
-  let cleanId = typeof roomId === 'object' ? (roomId.roomId || '') : roomId;
-  if (!cleanId) return null;
-  const key = Object.keys(rooms).find(r => r.toUpperCase() === cleanId.toString().trim().toUpperCase());
-  return key ? rooms[key] : null;
+// Robust helper to lookup active room by ID or socket association
+function getRoom(payload, socketId) {
+  let cleanId = null;
+  if (payload) {
+    if (typeof payload === 'string') cleanId = payload;
+    else if (typeof payload === 'object' && payload.roomId) cleanId = payload.roomId;
+  }
+
+  if (cleanId) {
+    const key = Object.keys(rooms).find(r => r.toUpperCase() === cleanId.toString().trim().toUpperCase());
+    if (key) return rooms[key];
+  }
+
+  // Fallback lookup using socketId
+  if (socketId) {
+    const foundByHost = Object.values(rooms).find(r => r.hostSocketId === socketId);
+    if (foundByHost) return foundByHost;
+
+    const foundByPlayer = Object.values(rooms).find(r => r.players && r.players[socketId]);
+    if (foundByPlayer) return foundByPlayer;
+  }
+
+  return null;
 }
 
 io.on('connection', (socket) => {
@@ -204,7 +220,7 @@ io.on('connection', (socket) => {
 
   // Player joins room
   socket.on('player:join', ({ roomId, nickname, avatar }) => {
-    const room = getRoom(roomId);
+    const room = getRoom(roomId, socket.id);
 
     if (!room) {
       return socket.emit('player:join_error', { message: 'Mã phòng không tồn tại hoặc đã đóng!' });
@@ -244,10 +260,9 @@ io.on('connection', (socket) => {
 
   // Host starts the game / first scenario
   socket.on('host:start_game', (payload) => {
-    const targetId = payload && payload.roomId ? payload.roomId : payload;
-    const room = getRoom(targetId);
+    const room = getRoom(payload, socket.id);
     if (!room) {
-      console.error(`[Game] host:start_game failed - room not found for payload:`, payload);
+      console.error(`[Game] host:start_game failed - room not found for socket ${socket.id}`);
       return;
     }
 
@@ -272,7 +287,7 @@ io.on('connection', (socket) => {
   // Player casts vote
   socket.on('player:cast_vote', (payload) => {
     const { roomId, scenarioIndex, optionId } = payload || {};
-    const room = getRoom(roomId);
+    const room = getRoom(roomId, socket.id);
     if (!room || room.gameState.votingState !== 'VOTING') return;
 
     const player = room.players[socket.id];
@@ -308,10 +323,9 @@ io.on('connection', (socket) => {
 
   // Host reveals outcome
   socket.on('host:reveal_outcome', (payload) => {
-    const targetId = payload && payload.roomId ? payload.roomId : payload;
-    const room = getRoom(targetId);
+    const room = getRoom(payload, socket.id);
     if (!room || room.gameState.votingState !== 'VOTING') {
-      console.error(`[Game] host:reveal_outcome failed - room not found or not in VOTING state:`, payload);
+      console.error(`[Game] host:reveal_outcome failed - room not found or not in VOTING state for socket ${socket.id}:`, payload);
       return;
     }
 
@@ -441,10 +455,9 @@ io.on('connection', (socket) => {
 
   // Host advances to next scenario
   socket.on('host:next_scenario', (payload) => {
-    const targetId = payload && payload.roomId ? payload.roomId : payload;
-    const room = getRoom(targetId);
+    const room = getRoom(payload, socket.id);
     if (!room) {
-      console.error(`[Game] host:next_scenario failed - room not found for payload:`, payload);
+      console.error(`[Game] host:next_scenario failed - room not found for socket ${socket.id}:`, payload);
       return;
     }
 
