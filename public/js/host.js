@@ -240,7 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle modal and control buttons
     outcomeModal.classList.remove('hidden');
     revealOutcomeBtn.classList.add('hidden');
-    votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn "Tiếp Tục Diễn Tiến Lịch Sử" trong bảng kết quả!`;
+    if (nextScenarioBtn) nextScenarioBtn.classList.remove('hidden');
+    votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Nhấn "Kịch Bản Tiếp Theo" hoặc nút trong bảng kết quả!`;
   });
 
   socket.on('game:ended', (data) => {
