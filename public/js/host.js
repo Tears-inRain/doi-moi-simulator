@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const timelineProgress = document.getElementById('timelineProgress');
 
   // Initial socket room creation
-  socket.emit('host:create_room');
+  socket.emit('host:create_room', { origin: window.location.origin });
 
   socket.on('room_created', (data) => {
     roomId = data.roomId;

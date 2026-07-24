@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const simFinalSummaryView = document.getElementById('simFinalSummaryView');
 
   // Host creates room on load
-  socket.emit('host:create_room');
+  socket.emit('host:create_room', { origin: window.location.origin });
 
   socket.on('room_created', (data) => {
     roomId = data.roomId;
@@ -652,4 +652,126 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  // Expose openArticleModal globally for inline onclick handlers
+  window.openArticleModal = openArticleModal;
+
+  // Document-level event delegation for article cards
+  document.addEventListener('click', (e) => {
+    // If click originates from an explicit external source link (target="_blank"), do not open modal
+    if (e.target.closest('a[target="_blank"]')) return;
+
+    const articleCard = e.target.closest('article[data-article-id]');
+    if (articleCard) {
+      const articleId = articleCard.getAttribute('data-article-id');
+      if (articleId) {
+        if (window.SoundEngine) SoundEngine.playClick();
+        openArticleModal(articleId);
+      }
+    }
+  });
+
+  async function openArticleModal(id) {
+    const articleModal = document.getElementById('articleModal');
+    const closeArticleModalBtn = document.getElementById('closeArticleModalBtn');
+    const articleCategoryBadge = document.getElementById('articleCategoryBadge');
+    const articleModalTitle = document.getElementById('articleModalTitle');
+    const articleTextContent = document.getElementById('articleTextContent');
+    const articleGalleryContainer = document.getElementById('articleGalleryContainer');
+    const articleImagesGrid = document.getElementById('articleImagesGrid');
+    const articleSourceBtn = document.getElementById('articleSourceBtn');
+
+    if (!articleModal) return;
+
+    // Show modal loading state
+    if (articleModalTitle) articleModalTitle.textContent = "Đang tải nội dung bài viết...";
+    if (articleTextContent) articleTextContent.innerHTML = `<div class="text-center py-8 text-slate-400 italic"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải dữ liệu báo chí & văn kiện...</div>`;
+    if (articleGalleryContainer) articleGalleryContainer.classList.add('hidden');
+    if (articleImagesGrid) articleImagesGrid.innerHTML = '';
+    
+    articleModal.classList.remove('hidden');
+
+    try {
+      const res = await fetch(`/api/articles/${id}`);
+      if (!res.ok) throw new Error("Không thể lấy dữ liệu bài viết");
+
+      const data = await res.json();
+
+      if (articleCategoryBadge) articleCategoryBadge.textContent = data.category || `CHUYÊN ĐỀ 0${id}`;
+      if (articleModalTitle) articleModalTitle.textContent = data.title || `Chuyên đề ${id}`;
+
+      // Format text content into paragraphs
+      if (articleTextContent && data.content) {
+        const paragraphs = data.content
+          .split(/\n\s*\n/)
+          .map(p => p.trim())
+          .filter(p => p.length > 0)
+          .map(p => `<p class="mb-4 leading-relaxed text-slate-300">${escapeHtml(p)}</p>`)
+          .join('');
+        articleTextContent.innerHTML = paragraphs;
+      }
+
+      // Render image gallery if images exist
+      if (data.images && data.images.length > 0 && articleImagesGrid && articleGalleryContainer) {
+        articleImagesGrid.innerHTML = data.images.map(imgUrl => `
+          <div class="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 cursor-pointer shadow">
+            <img src="${imgUrl}" alt="Tư liệu" class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+            <a href="${imgUrl}" target="_blank" class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+              <i class="fa-solid fa-expand"></i><span>Phóng to</span>
+            </a>
+          </div>
+        `).join('');
+        articleGalleryContainer.classList.remove('hidden');
+      }
+
+      // Set source link
+      if (articleSourceBtn) {
+        if (data.sourceUrl) {
+          articleSourceBtn.href = data.sourceUrl;
+          articleSourceBtn.classList.remove('pointer-events-none', 'opacity-50');
+        } else {
+          articleSourceBtn.href = '#';
+          articleSourceBtn.classList.add('pointer-events-none', 'opacity-50');
+        }
+      }
+
+    } catch (err) {
+      console.error("Error opening article modal:", err);
+      if (articleTextContent) {
+        articleTextContent.innerHTML = `<div class="text-center py-6 text-red-400">Không thể tải nội dung bài viết. Vui lòng thử lại sau.</div>`;
+      }
+    }
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Close Article Modal Listeners
+  if (closeArticleModalBtn) {
+    closeArticleModalBtn.addEventListener('click', () => {
+      if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
+      if (articleModal) articleModal.classList.add('hidden');
+    });
+  }
+
+  if (articleModal) {
+    articleModal.addEventListener('click', (e) => {
+      if (e.target === articleModal) {
+        if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
+        articleModal.classList.add('hidden');
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && articleModal && !articleModal.classList.contains('hidden')) {
+      articleModal.classList.add('hidden');
+    }
+  });
 });

@@ -6,20 +6,38 @@ const path = require('path');
 const os = require('os');
 const cors = require('cors');
 
+const fs = require('fs');
+
 const SCENARIOS = require('./data/scenarios');
 
 const app = express();
 const server = http.createServer(app);
 
-// Socket.io with wildcard CORS for Cloudflare Tunnel & local network access
+// Allowed origins for CORS configuration
+const ALLOWED_ORIGINS = [
+  'https://vnr202.l4st-r4ven.io.vn',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin, allowed origins, or local network IPs
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1') || origin.startsWith('http://192.168.') || origin.startsWith('http://10.')) {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
+  methods: ["GET", "POST"],
+  credentials: true
+};
+
 const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
+  cors: corsOptions
 });
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -30,6 +48,71 @@ app.get('/', (req, res) => {
 
 app.get('/player', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'player.html'));
+});
+
+// Editorial Articles API Endpoint
+const ARTICLE_METADATA = {
+  1: {
+    title: "Đêm Trước Đổi Mới & Bước Ngoặt Đại Hội VI (12/1986)",
+    category: "ĐẠI HỘI VI (1986)"
+  },
+  2: {
+    title: "Từ Quốc Gia Thiếu Ăn Đến Kỳ Tích Nông Nghiệp Tự Cấp Lương Thực (Khoán 10 - 1988)",
+    category: "KHOÁN 10 (1988)"
+  },
+  3: {
+    title: "Bản Đồ Hội Nhập Quốc Tế: Phá Bỏ Cấm Vận & Vươn Ra Biển Lớn (1995 & 2007)",
+    category: "ĐỐI NGOẠI (1995 & 2007)"
+  },
+  4: {
+    title: "Đấu Tranh Phòng, Chống Tham Nhũng: Giữ Vững Niềm Tin Của Nhân Dân (2016)",
+    category: "CHỈNH ĐỐN ĐẢNG (2016)"
+  }
+};
+
+app.get('/api/articles/:id', (req, res) => {
+  const articleId = parseInt(req.params.id, 10);
+  if (!articleId || articleId < 1 || articleId > 4) {
+    return res.status(404).json({ error: "Bài viết không tồn tại." });
+  }
+
+  const articleDir = path.join(__dirname, 'public', 'assets', 'articles', `article${articleId}`);
+  const contentPath = path.join(articleDir, 'content.txt');
+  const sourcePath = path.join(articleDir, 'source.txt');
+
+  let content = "";
+  let sourceUrl = "";
+  let images = [];
+
+  try {
+    if (fs.existsSync(contentPath)) {
+      content = fs.readFileSync(contentPath, 'utf-8');
+    }
+    if (fs.existsSync(sourcePath)) {
+      sourceUrl = fs.readFileSync(sourcePath, 'utf-8').trim();
+    }
+    if (fs.existsSync(articleDir)) {
+      const files = fs.readdirSync(articleDir);
+      const validExts = ['.avif', '.webp', '.png', '.jpg', '.jpeg'];
+      images = files
+        .filter(f => validExts.includes(path.extname(f).toLowerCase()))
+        .map(f => `/assets/articles/article${articleId}/${f}`);
+    }
+
+    const meta = ARTICLE_METADATA[articleId] || { title: `Chuyên đề 0${articleId}`, category: `CHUYÊN ĐỀ 0${articleId}` };
+
+    res.json({
+      id: articleId,
+      title: meta.title,
+      category: meta.category,
+      content,
+      sourceUrl,
+      images
+    });
+  } catch (err) {
+    console.error(`Error loading article ${articleId}:`, err);
+    res.status(500).json({ error: "Lỗi đọc dữ liệu bài viết." });
+  }
 });
 
 // Helper to get local network IP address
@@ -71,9 +154,16 @@ io.on('connection', (socket) => {
   console.log(`[Socket] Client connected: ${socket.id}`);
 
   // Host creates a room
-  socket.on('host:create_room', async () => {
+  socket.on('host:create_room', async (data) => {
     const roomId = 'DM-' + Math.floor(1000 + Math.random() * 9000);
-    const joinUrl = `http://${HOST_IP}:${PORT}/player.html?room=${roomId}`;
+    
+    // Base URL resolution order: process.env.PUBLIC_DOMAIN -> data.origin -> default public domain https://vnr202.l4st-r4ven.io.vn
+    let baseUrl = process.env.PUBLIC_DOMAIN || (data && data.origin ? data.origin : 'https://vnr202.l4st-r4ven.io.vn');
+    if (baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, -1);
+    }
+
+    const joinUrl = `${baseUrl}/player?room=${roomId}`;
     
     let qrCodeDataUrl = '';
     try {

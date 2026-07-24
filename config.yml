@@ -1,0 +1,10 @@
+# Cloudflare Tunnel Configuration for Digital Museum & Simulator
+# Replace <YOUR_TUNNEL_ID_OR_NAME> and credentials path with your specific Cloudflare Tunnel credentials
+
+tunnel: a32448da-6cea-44a6-b41c-ed315437b15d
+credentials-file: C:\Users\RAVEN\.cloudflared\a32448da-6cea-44a6-b41c-ed315437b15d.json
+
+ingress:
+  - hostname: vnr202.l4st-r4ven.io.vn
+    service: http://localhost:3000
+  - service: http_status:404
