@@ -119,8 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   modalContinueBtn.addEventListener('click', () => {
-    SoundEngine.playClick();
+    if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch(e){} }
     outcomeModal.classList.add('hidden');
+    if (roomId) {
+      socket.emit('host:next_scenario', { roomId });
+    }
   });
 
   startScenarioBtn.addEventListener('click', () => {

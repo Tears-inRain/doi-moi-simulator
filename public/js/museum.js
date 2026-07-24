@@ -428,42 +428,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (modalContinueBtn) {
     modalContinueBtn.addEventListener('click', () => {
-      SoundEngine.playClick();
+      if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
       if (outcomeModal) outcomeModal.classList.add('hidden');
+      if (roomId) socket.emit('host:next_scenario', { roomId });
     });
   }
 
   if (startScenarioBtn) {
     startScenarioBtn.addEventListener('click', () => {
-      SoundEngine.playClick();
+      if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
       if (roomId) socket.emit('host:start_game', { roomId });
     });
   }
 
   if (revealOutcomeBtn) {
     revealOutcomeBtn.addEventListener('click', () => {
-      SoundEngine.playClick();
+      if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
       if (roomId) socket.emit('host:reveal_outcome', { roomId });
     });
   }
 
   if (nextScenarioBtn) {
     nextScenarioBtn.addEventListener('click', () => {
-      SoundEngine.playClick();
+      if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
       if (roomId) socket.emit('host:next_scenario', { roomId });
     });
   }
 
   if (restartGameBtn) {
     restartGameBtn.addEventListener('click', () => {
-      SoundEngine.playClick();
+      if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
       if (roomId) socket.emit('host:restart_game', { roomId });
     });
   }
 
   // Socket Simulator Events
   socket.on('scenario:started', (data) => {
-    SoundEngine.playClick();
+    if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
     currentScenarioIndex = data.scenarioIndex;
 
     if (outcomeModal) outcomeModal.classList.add('hidden');
@@ -508,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('scenario:outcome', (data) => {
-    SoundEngine.playOutcomeReveal();
+    if (window.SoundEngine && typeof SoundEngine.playOutcomeReveal === 'function') { try { SoundEngine.playOutcomeReveal(); } catch (e) {} }
     updateMetricsUI(data.newMetrics, data.newInflation);
 
     const optId = data.winningOptionId;
@@ -547,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (outcomeModal) outcomeModal.classList.remove('hidden');
     if (revealOutcomeBtn) revealOutcomeBtn.classList.add('hidden');
-    if (nextScenarioBtn) nextScenarioBtn.remove('hidden');
+    if (nextScenarioBtn) nextScenarioBtn.classList.remove('hidden');
     if (votingStatusText) votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn Tiếp Theo!`;
   });
 
