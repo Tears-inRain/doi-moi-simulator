@@ -548,8 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (outcomeModal) outcomeModal.classList.remove('hidden');
     if (revealOutcomeBtn) revealOutcomeBtn.classList.add('hidden');
-    if (nextScenarioBtn) nextScenarioBtn.classList.remove('hidden');
-    if (votingStatusText) votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn Tiếp Theo!`;
+    if (votingStatusText) votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn "Tiếp Tục Diễn Tiến Lịch Sử" trong bảng kết quả!`;
   });
 
   socket.on('game:ended', (data) => {

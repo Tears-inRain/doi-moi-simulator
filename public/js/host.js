@@ -140,12 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  nextScenarioBtn.addEventListener('click', () => {
-    SoundEngine.playClick();
-    if (roomId) {
-      socket.emit('host:next_scenario', { roomId });
-    }
-  });
+  if (nextScenarioBtn) {
+    nextScenarioBtn.addEventListener('click', () => {
+      SoundEngine.playClick();
+      if (roomId) {
+        socket.emit('host:next_scenario', { roomId });
+      }
+    });
+  }
 
   restartGameBtn.addEventListener('click', () => {
     SoundEngine.playClick();
@@ -248,8 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle modal and control buttons
     outcomeModal.classList.remove('hidden');
     revealOutcomeBtn.classList.add('hidden');
-    nextScenarioBtn.classList.remove('hidden');
-    votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn Tiếp Theo!`;
+    votingStatusText.textContent = `Đã chốt quyết sách ${data.scenario.year}. Hãy nhấn "Tiếp Tục Diễn Tiến Lịch Sử" trong bảng kết quả!`;
   });
 
   socket.on('game:ended', (data) => {
