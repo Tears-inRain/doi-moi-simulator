@@ -430,35 +430,35 @@ document.addEventListener('DOMContentLoaded', () => {
     modalContinueBtn.addEventListener('click', () => {
       if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
       if (outcomeModal) outcomeModal.classList.add('hidden');
-      if (roomId) socket.emit('host:next_scenario', { roomId });
+      socket.emit('host:next_scenario', { roomId });
     });
   }
 
   if (startScenarioBtn) {
     startScenarioBtn.addEventListener('click', () => {
       if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
-      if (roomId) socket.emit('host:start_game', { roomId });
+      socket.emit('host:start_game', { roomId });
     });
   }
 
   if (revealOutcomeBtn) {
     revealOutcomeBtn.addEventListener('click', () => {
       if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
-      if (roomId) socket.emit('host:reveal_outcome', { roomId });
+      socket.emit('host:reveal_outcome', { roomId });
     });
   }
 
   if (nextScenarioBtn) {
     nextScenarioBtn.addEventListener('click', () => {
       if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
-      if (roomId) socket.emit('host:next_scenario', { roomId });
+      socket.emit('host:next_scenario', { roomId });
     });
   }
 
   if (restartGameBtn) {
     restartGameBtn.addEventListener('click', () => {
       if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch (e) {} }
-      if (roomId) socket.emit('host:restart_game', { roomId });
+      socket.emit('host:restart_game', { roomId });
     });
   }
 

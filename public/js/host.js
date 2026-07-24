@@ -121,39 +121,29 @@ document.addEventListener('DOMContentLoaded', () => {
   modalContinueBtn.addEventListener('click', () => {
     if (window.SoundEngine && typeof SoundEngine.playClick === 'function') { try { SoundEngine.playClick(); } catch(e){} }
     outcomeModal.classList.add('hidden');
-    if (roomId) {
-      socket.emit('host:next_scenario', { roomId });
-    }
+    socket.emit('host:next_scenario', { roomId });
   });
 
   startScenarioBtn.addEventListener('click', () => {
     SoundEngine.playClick();
-    if (roomId) {
-      socket.emit('host:start_game', { roomId });
-    }
+    socket.emit('host:start_game', { roomId });
   });
 
   revealOutcomeBtn.addEventListener('click', () => {
     SoundEngine.playClick();
-    if (roomId) {
-      socket.emit('host:reveal_outcome', { roomId });
-    }
+    socket.emit('host:reveal_outcome', { roomId });
   });
 
   if (nextScenarioBtn) {
     nextScenarioBtn.addEventListener('click', () => {
       SoundEngine.playClick();
-      if (roomId) {
-        socket.emit('host:next_scenario', { roomId });
-      }
+      socket.emit('host:next_scenario', { roomId });
     });
   }
 
   restartGameBtn.addEventListener('click', () => {
     SoundEngine.playClick();
-    if (roomId) {
-      socket.emit('host:restart_game', { roomId });
-    }
+    socket.emit('host:restart_game', { roomId });
   });
 
   // Game Socket Events
